@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TKA Lab — Personal TKA Trainer</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--ink:#172033;--muted:#6d7688;--blue:#2457d6;--blue2:#eaf0ff;--green:#17845b;--red:#d34b58;--amber:#c27a12;--line:#e3e7ef;--shadow:0 10px 30px rgba(25,35,60,.07)}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--ink)}
+button{font:inherit;cursor:pointer;border:0}.app{display:flex;min-height:100vh}.side{width:250px;background:#111827;color:#fff;padding:22px 16px;position:fixed;inset:0 auto 0 0}.brand{font-weight:800;font-size:22px;padding:10px 12px 26px}.brand small{display:block;color:#9ca7bc;font-size:11px;font-weight:500;margin-top:4px}.nav button{display:block;width:100%;text-align:left;background:transparent;color:#b9c2d3;padding:12px;border-radius:10px;margin:3px 0}.nav button:hover,.nav button.active{background:#202b40;color:#fff}.main{margin-left:250px;width:calc(100% - 250px);padding:28px;max-width:1500px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}.top h1{margin:0;font-size:27px}.top p{margin:5px 0 0;color:var(--muted)}.pill{background:var(--blue2);color:var(--blue);padding:8px 12px;border-radius:999px;font-size:12px;font-weight:700}.grid{display:grid;gap:16px}.g5{grid-template-columns:repeat(5,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:19px;box-shadow:var(--shadow)}.metric .label{color:var(--muted);font-size:12px}.metric .num{font-size:26px;font-weight:800;margin-top:8px}.subject{position:relative;overflow:hidden}.subject h3{margin:0 0 8px}.subject .score{font-size:28px;font-weight:800}.bar{height:7px;background:#edf0f5;border-radius:9px;overflow:hidden;margin:12px 0}.bar i{display:block;height:100%;background:var(--blue);border-radius:9px}.muted{color:var(--muted);font-size:13px}.btn{padding:11px 15px;border-radius:10px;background:var(--blue);color:#fff;font-weight:700}.btn.secondary{background:#eef2f8;color:#263247}.btn.danger{background:#fff0f1;color:var(--red)}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.between{display:flex;justify-content:space-between;gap:15px;align-items:center}.section{margin-top:22px}.section h2{font-size:18px;margin:0 0 12px}.topic{padding:14px 0;border-bottom:1px solid var(--line)}.topic:last-child{border:0}.topicline{display:flex;justify-content:space-between}.status{font-size:11px;padding:4px 8px;border-radius:999px;background:#eef2f8}.status.weak{background:#fff0f1;color:var(--red)}.status.good{background:#eaf8f2;color:var(--green)}.hidden{display:none!important}
+.choice{display:block;width:100%;text-align:left;padding:15px;border:1px solid var(--line);background:#fff;border-radius:11px;margin:10px 0}.choice.selected{border:2px solid var(--blue);background:#f1f5ff}.exam{max-width:1100px;margin:auto}.timer{font-size:24px;font-weight:800;color:var(--blue)}.qnav{display:flex;gap:7px;flex-wrap:wrap}.qnum{width:38px;height:38px;border-radius:8px;background:#eef1f6;color:#445066}.qnum.answered{background:#dce8ff;color:#1748bc}.qnum.current{outline:2px solid var(--blue)}.qnum.marked{box-shadow:inset 0 -4px 0 #c27a12}.question{font-size:18px;line-height:1.65}.resultbig{text-align:center;padding:28px}.resultbig .score{font-size:58px;font-weight:900}.listitem{padding:14px 0;border-bottom:1px solid var(--line)}.listitem:last-child{border:0}.empty{text-align:center;padding:45px;color:var(--muted)}.toast{position:fixed;right:22px;bottom:22px;background:#172033;color:#fff;padding:13px 16px;border-radius:10px;box-shadow:var(--shadow);z-index:20}
+@media(max-width:1050px){.g5{grid-template-columns:repeat(3,1fr)}.g3{grid-template-columns:1fr 1fr}.side{width:210px}.main{margin-left:210px;width:calc(100% - 210px)}}
+@media(max-width:700px){.side{position:static;width:100%;height:auto}.app{display:block}.main{margin:0;width:100%;padding:18px}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap;width:auto}.g5,.g3,.g2{grid-template-columns:1fr}.top{align-items:flex-start}.question{font-size:16px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side">
+  <div class="brand">TKA LAB<small>PERSONAL TKA TRAINER</small></div>
+  <div class="nav">
+    <button data-page="dashboard">⌂ Dashboard</button>
+    <button data-page="tryout">▣ Try Out</button>
+    <button data-page="practice">✦ Practice</button>
+    <button data-page="mistakes">⚠ My Mistakes</button>
+    <button data-page="progress">◈ Progress</button>
+    <button data-page="history">◷ History</button>
+    <button data-page="concept">⌁ Concept Lab</button>
+    <button data-page="formula">∑ Formula Sheet</button>
+  </div>
+</aside>
+<main class="main" id="app"></main>
+</div>
+<script>
+const subjects=[
+ {id:'math',name:'Matematika',group:'Wajib',time:75,count:45,score:76,weak:'Peluang & statistika'},
+ {id:'indo',name:'Bahasa Indonesia',group:'Wajib',time:75,count:45,score:84,weak:'Interpretasi teks'},
+ {id:'eng',name:'Bahasa Inggris',group:'Wajib',time:75,count:45,score:78,weak:'Reading comprehension'},
+ {id:'chem',name:'Kimia',group:'Pilihan',time:60,count:45,score:71,weak:'Stoikiometri'},
+ {id:'phys',name:'Fisika',group:'Pilihan',time:60,count:45,score:68,weak:'Fluida'}
+];
+const demo=[
+{id:1,s:'phys',topic:'Kinematika',d:'easy',q:'Sebuah benda bergerak lurus dengan kecepatan konstan 10 m/s selama 8 s. Jarak yang ditempuh adalah …',o:['18 m','80 m','80 km','800 m','1,25 m'],a:1,e:'Pada gerak dengan kecepatan konstan, s = v × t = 10 × 8 = 80 m.'},
+{id:2,s:'phys',topic:'Dinamika',d:'medium',q:'Sebuah benda bermassa 4 kg mengalami percepatan 3 m/s². Resultan gaya pada benda adalah …',o:['1 N','7 N','12 N','16 N','24 N'],a:2,e:'Gunakan F = m a. Jadi F = 4 × 3 = 12 N.'},
+{id:3,s:'phys',topic:'Fluida',d:'medium',q:'Ketika luas penampang aliran diperkecil pada fluida ideal yang mengalir tunak, kelajuan fluida akan …',o:['berkurang','tetap','bertambah','menjadi nol','tidak dapat ditentukan'],a:2,e:'Persamaan kontinuitas A₁v₁ = A₂v₂. Jika luas penampang mengecil, kelajuan meningkat.'},
+{id:4,s:'phys',topic:'Energi',d:'easy',q:'Energi kinetik benda bermassa 2 kg yang bergerak dengan kecepatan 5 m/s adalah …',o:['5 J','10 J','20 J','25 J','50 J'],a:3,e:'Ek = 1/2 mv² = 1/2 × 2 × 25 = 25 J.'},
+{id:5,s:'phys',topic:'Listrik',d:'medium',q:'Sebuah resistor 6 Ω dihubungkan pada tegangan 12 V. Arus yang mengalir adalah …',o:['0,5 A','2 A','6 A','18 A','72 A'],a:1,e:'Hukum Ohm: I = V/R = 12/6 = 2 A.'},
+{id:6,s:'chem',topic:'Stoikiometri',d:'medium',q:'Jika Mr H₂O = 18, massa 2 mol H₂O adalah …',o:['9 g','18 g','20 g','36 g','40 g'],a:3,e:'m = n × Mr = 2 × 18 = 36 g.'},
+{id:7,s:'chem',topic:'Ikatan Kimia',d:'easy',q:'Atom dengan kecenderungan menerima satu elektron untuk mencapai kestabilan memiliki jumlah elektron valensi …',o:['1','2','3','6','7'],a:4,e:'Unsur golongan 17 umumnya memiliki 7 elektron valensi dan cenderung menerima 1 elektron.'},
+{id:8,s:'chem',topic:'Asam-Basa',d:'easy',q:'Larutan dengan pH 3 bersifat …',o:['asam','netral','basa','garam murni','tidak dapat ditentukan'],a:0,e:'pH < 7 menunjukkan sifat asam.'},
+{id:9,s:'math',topic:'Peluang',d:'easy',q:'Sebuah dadu dilempar sekali. Peluang muncul bilangan genap adalah …',o:['1/6','1/3','1/2','2/3','5/6'],a:2,e:'Bilangan genap: 2, 4, 6. Ada 3 dari 6 kemungkinan, jadi 3/6 = 1/2.'},
+{id:10,s:'math',topic:'Fungsi',d:'medium',q:'Jika f(x)=2x+3, maka f(4) adalah …',o:['7','8','9','11','12'],a:3,e:'f(4)=2(4)+3=11.'},
+{id:11,s:'indo',topic:'Interpretasi Teks',d:'medium',q:'Dalam teks argumentasi, data statistik terutama digunakan untuk …',o:['memperpanjang teks','memperkuat argumen','menghibur pembaca','mengubah topik','menghilangkan simpulan'],a:1,e:'Data statistik berfungsi sebagai bukti yang memperkuat argumen.'},
+{id:12,s:'eng',topic:'Reading Comprehension',d:'medium',q:'The main purpose of a paragraph is best identified by looking at its …',o:['least important detail','main idea','longest sentence','punctuation','number of words'],a:1,e:'The main idea captures the central point of the paragraph.'}
+];
+let state=JSON.parse(localStorage.getItem('tkaLab')||'{"history":[],"mistakes":[],"exposure":{},"attempts":0}');
+let exam=null, page='dashboard', practiceMode=false;
+function save(){localStorage.setItem('tkaLab',JSON.stringify(state))}
+function subj(id){return subjects.find(x=>x.id===id)}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function toast(x){let t=document.createElement('div');t.className='toast';t.textContent=x;document.body.appendChild(t);setTimeout(()=>t.remove(),1800)}
+function render(){
+ document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
+ if(exam){renderExam();return}
+ if(page==='dashboard')dashboard();
+ if(page==='tryout')tryouts();
+ if(page==='practice')practice();
+ if(page==='mistakes')mistakes();
+ if(page==='progress')progress();
+ if(page==='history')history();
+ if(page==='concept')concept();
+ if(page==='formula')formula();
+}
+function shell(title,sub){return `<div class="top"><div><h1>${title}</h1><p>${sub}</p></div><span class="pill">PERSONAL TRAINING</span></div>`}
+function dashboard(){
+ let avg=Math.round(subjects.reduce((a,b)=>a+b.score,0)/subjects.length);
+ document.getElementById('app').innerHTML=shell('Dashboard','Pantau kemampuan, kesalahan, dan target latihanmu.')+
+ `<div class="grid g5">${[['Rata-rata',avg+''],['Try Out',state.history.length],['Soal dikerjakan',state.history.reduce((a,b)=>a+b.total,0)||0],['Mistakes',state.mistakes.length],['Streak','1 hari']].map(x=>`<div class="card metric"><div class="label">${x[0]}</div><div class="num">${x[1]}</div></div>`).join('')}</div>
+ <div class="section"><h2>Subject Overview</h2><div class="grid g5">${subjects.map(s=>`<div class="card subject"><h3>${s.name}</h3><div class="score">${s.score}</div><div class="bar"><i style="width:${s.score}%"></i></div><div class="muted">${s.group} · fokus: ${s.weak}</div><button class="btn secondary" style="margin-top:13px" onclick="start('${s.id}',false)">Latihan</button></div>`).join('')}</div></div>
+ <div class="section grid g2"><div class="card"><div class="between"><h2>Recommended Focus</h2><span class="status weak">Needs Practice</span></div><h3>Fisika — Fluida</h3><p class="muted">Area yang perlu diperkuat. Mulai dari kontinuitas dan Bernoulli.</p><button class="btn" onclick="start('phys',true)">Mulai Adaptive Practice</button></div>
+ <div class="card"><h2>Coaching</h2><p>${state.history.length?`Kamu sudah menyelesaikan ${state.history.length} sesi. Review soal yang salah sebelum mengulang full Try Out.`:'Mulai dengan satu Try Out untuk membangun profil kemampuanmu.'}</p></div></div>`;
+}
+function tryouts(){
+ document.getElementById('app').innerHTML=shell('Try Out','Simulasi ujian dengan timer, navigasi soal, dan set soal baru.')+
+ `<div class="grid g2">${subjects.map(s=>`<div class="card"><div class="between"><div><h2>${s.name}</h2><p class="muted">${s.group} · ${s.count} soal · ${s.time} menit</p></div><span class="pill">${s.score} terakhir</span></div><p>Soal dipilih dengan randomisasi terkontrol dan riwayat paparan.</p><button class="btn" onclick="start('${s.id}',false)">Mulai Try Out</button></div>`).join('')}</div>`;
+}
+function practice(){
+ document.getElementById('app').innerHTML=shell('Practice','Latihan terarah berdasarkan topik dan performa.')+
+ `<div class="grid g2">${subjects.map(s=>`<div class="card"><h2>${s.name}</h2><p class="muted">Fokus otomatis: ${s.weak}</p><div class="bar"><i style="width:${s.score}%"></i></div><div class="row"><button class="btn" onclick="start('${s.id}',true)">Adaptive 10 Soal</button><button class="btn secondary" onclick="start('${s.id}',false)">Mixed</button></div></div>`).join('')}</div>`;
+}
+function start(sid,adaptive){
+ const s=subj(sid); let pool=demo.filter(q=>q.s===sid);
+ if(!pool.length){pool=demo.filter(q=>q.s==='phys')} // demo fallback
+ let count=Math.min(adaptive?10:s.count,pool.length);
+ let sorted=[...pool].sort(()=>Math.random()-.5);
+ let recent=new Set(state.history.filter(h=>h.subject===sid).flatMap(h=>h.ids||[]));
+ sorted.sort((a,b)=>(recent.has(a.id)?1:0)-(recent.has(b.id)?1:0));
+ let qs=sorted.slice(0,count);
+ exam={sid,adaptive,qs,answers:{},marked:{},i:0,start:Date.now(),seconds:(adaptive?Math.min(15,count*2):s.time*60)};
+ renderExam();
+ exam.interval=setInterval(()=>{if(!exam)return;exam.seconds--; if(exam.seconds<=0){clearInterval(exam.interval);finish()} renderExamTimer()},1000);
+}
+function renderExam(){
+ let q=exam.qs[exam.i], s=subj(exam.sid);
+ document.getElementById('app').innerHTML=`<div class="exam">
+ <div class="top"><div><h1>${s.name} ${exam.adaptive?'— Adaptive Practice':'— Try Out'}</h1><p>Soal ${exam.i+1} dari ${exam.qs.length}</p></div><div class="timer" id="timer">${fmt(exam.seconds)}</div></div>
+ <div class="card"><div class="qnav">${exam.qs.map((x,i)=>`<button class="qnum ${exam.answers[x.id]!==undefined?'answered':''} ${exam.marked[x.id]?'marked':''} ${i===exam.i?'current':''}" onclick="exam.i=${i};renderExam()">${i+1}</button>`).join('')}</div></div>
+ <div class="section card"><div class="between"><span class="pill">${q.topic} · ${q.d}</span><button class="btn secondary" onclick="exam.marked[${q.id}]=!exam.marked[${q.id}];renderExam()">⚑ ${exam.marked[q.id]?'Hapus tanda':'Tandai'}</button></div>
+ <div class="question" style="margin-top:22px"><strong>${q.q}</strong></div>
+ <div style="margin-top:18px">${q.o.map((o,i)=>`<button class="choice ${exam.answers[q.id]===i?'selected':''}" onclick="exam.answers[${q.id}]=${i};renderExam()"><b>${String.fromCharCode(65+i)}.</b> ${o}</button>`).join('')}</div>
+ <div class="between" style="margin-top:20px"><button class="btn secondary" onclick="if(exam.i>0){exam.i--;renderExam()}">← Sebelumnya</button>${exam.i===exam.qs.length-1?`<button class="btn" onclick="finish()">Kumpulkan</button>`:`<button class="btn" onclick="exam.i++;renderExam()">Berikutnya →</button>`}</div></div></div>`;
+}
+function renderExamTimer(){let el=document.getElementById('timer');if(el)el.textContent=fmt(exam.seconds)}
+function fmt(sec){let m=Math.floor(sec/60),s=sec%60;return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')}
+function finish(){
+ if(!exam)return; clearInterval(exam.interval);
+ let correct=0; exam.qs.forEach(q=>{if(exam.answers[q.id]===q.a)correct++;else if(exam.answers[q.id]!==undefined){state.mistakes.unshift({...q,subject:exam.sid,user:exam.answers[q.id],date:new Date().toLocaleString('id-ID')})}});
+ let total=exam.qs.length,score=Math.round(correct/total*100), duration=Math.round((Date.now()-exam.start)/1000);
+ state.history.unshift({date:new Date().toLocaleString('id-ID'),subject:exam.sid,score,total,correct,accuracy:score,duration,ids:exam.qs.map(q=>q.id),mode:exam.adaptive?'Practice':'Try Out'});
+ state.attempts++;save();
+ let r={score,correct,total,duration,sid:exam.sid}; exam=null; renderResult(r);
+}
+function renderResult(r){
+ let s=subj(r.sid); let wrong=r.total-r.correct;
+ document.getElementById('app').innerHTML=shell('Hasil Sesi',`${s.name} · ${r.total} soal`) + `<div class="card resultbig"><div class="muted">SCORE</div><div class="score">${r.score}</div><p>${r.correct} benar · ${wrong} salah · ${fmt(r.duration)}</p><div class="row" style="justify-content:center"><button class="btn" onclick="page='mistakes';render()">Review Mistakes</button><button class="btn secondary" onclick="start('${r.sid}',true)">Latihan Lemah</button><button class="btn secondary" onclick="page='dashboard';render()">Dashboard</button></div></div>
+ <div class="section grid g3"><div class="card"><div class="muted">Accuracy</div><h2>${r.score}%</h2><p class="muted">Persentase jawaban benar.</p></div><div class="card"><div class="muted">Speed</div><h2>${fmt(Math.round(r.duration/r.total))}</h2><p class="muted">Rata-rata waktu per soal.</p></div><div class="card"><div class="muted">Next Step</div><h2>Review</h2><p class="muted">Baca pembahasan soal yang salah sebelum mengulang.</p></div></div>`;
+}
+function mistakes(){
+ document.getElementById('app').innerHTML=shell('My Mistakes','Semua soal yang pernah salah akan terkumpul di sini.')+
+ (state.mistakes.length?`<div class="card">${state.mistakes.map((q,i)=>`<div class="listitem"><div class="between"><strong>${q.topic}</strong><span class="status weak">Salah</span></div><p>${esc(q.q)}</p><div class="muted">Jawabanmu: ${q.user!==undefined?esc(q.o[q.user]):'Tidak dijawab'} · Benar: ${esc(q.o[q.a])}</div><details style="margin-top:8px"><summary>Pembahasan</summary><p>${esc(q.e)}</p></details></div>`).join('')}</div>`:`<div class="card empty">Belum ada mistakes. Selesaikan latihan untuk membangun Mistake Bank.</div>`);
+}
+function progress(){
+ let hist=state.history.slice(0,12).reverse();
+ document.getElementById('app').innerHTML=shell('Progress','Lihat perkembangan skor dan pola latihanmu.')+
+ `<div class="grid g3">${subjects.map(s=>`<div class="card"><div class="between"><strong>${s.name}</strong><span>${s.score}</span></div><div class="bar"><i style="width:${s.score}%"></i></div><span class="muted">Fokus: ${s.weak}</span></div>`).join('')}</div>
+ <div class="section card"><h2>Score Timeline</h2><div style="display:flex;gap:10px;align-items:end;height:220px;border-bottom:1px solid var(--line);padding:20px 5px">${hist.length?hist.map(h=>`<div title="${h.subject} ${h.score}" style="flex:1;height:${Math.max(8,h.score*1.7)}px;background:var(--blue);border-radius:6px 6px 0 0"></div>`).join(''):'<div class="empty" style="width:100%">Belum ada data. Mulai Try Out.</div>'}</div></div>`;
+}
+function history(){
+ document.getElementById('app').innerHTML=shell('History','Riwayat semua sesi latihan dan Try Out.')+
+ (state.history.length?`<div class="card">${state.history.map(h=>`<div class="listitem"><div class="between"><strong>${subj(h.subject).name} — ${h.mode}</strong><span class="pill">${h.score}</span></div><div class="muted">${h.date} · ${h.correct}/${h.total} benar · ${fmt(h.duration)}</div></div>`).join('')}</div>`:`<div class="card empty">Belum ada riwayat. Coba satu Try Out dulu.</div>`);
+}
+function concept(){
+ let phys=['Pengukuran','Vektor','Kinematika','Dinamika','Usaha & Energi','Momentum & Impuls','Fluida','Suhu & Kalor','Gelombang','Optik','Listrik','Magnet','Fisika Modern'];
+ let chem=['Struktur Atom','Sistem Periodik','Ikatan Kimia','Stoikiometri','Larutan','Asam-Basa','Termokimia','Kesetimbangan','Laju Reaksi','Elektrokimia','Kimia Organik'];
+ document.getElementById('app').innerHTML=shell('Concept Lab','Pusat konsep khusus Kimia dan Fisika. Struktur topik dapat diperluas sesuai kisi-kisi resmi.')+
+ `<div class="grid g2"><div class="card"><h2>⚡ Physics Concept Lab</h2>${phys.map(x=>`<div class="topic"><div class="topicline"><strong>${x}</strong><span class="status ${x==='Fluida'?'weak':'good'}">${x==='Fluida'?'Needs Practice':'Ready'}</span></div><div class="muted">Konsep · rumus · common mistake · latihan</div></div>`).join('')}</div>
+ <div class="card"><h2>⚗ Chemistry Concept Lab</h2>${chem.map(x=>`<div class="topic"><div class="topicline"><strong>${x}</strong><span class="status">${x==='Stoikiometri'?'Needs Practice':'Review'}</span></div><div class="muted">Konsep · rumus · common mistake · latihan</div></div>`).join('')}</div></div>`;
+}
+function formula(){
+ document.getElementById('app').innerHTML=shell('Formula Sheet','Rumus inti untuk review cepat.')+
+ `<div class="grid g2"><div class="card"><h2>⚡ Fisika</h2>${[['Newton','F = ma','Untuk resultan gaya.'],['Energi kinetik','Ek = ½mv²','Untuk energi karena gerak.'],['Momentum','p = mv','Untuk gerak dan tumbukan.'],['Kontinuitas','A₁v₁ = A₂v₂','Untuk aliran fluida tunak.'],['Bernoulli','P + ½ρv² + ρgh = konstan','Untuk fluida ideal dalam konteks yang sesuai.']].map(x=>`<div class="topic"><strong>${x[0]}</strong><div style="font-size:20px;margin:7px 0">${x[1]}</div><div class="muted">${x[2]}</div></div>`).join('')}</div><div class="card"><h2>⚗ Kimia</h2>${[['Mol','n = m/Mr','Menghubungkan massa dan jumlah mol.'],['Molaritas','M = n/V','V dalam liter.'],['pH asam kuat','pH = -log[H⁺]','Untuk larutan asam kuat pada kondisi sederhana.']].map(x=>`<div class="topic"><strong>${x[0]}</strong><div style="font-size:20px;margin:7px 0">${x[1]}</div><div class="muted">${x[2]}</div></div>`).join('')}</div></div>`;
+}
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>{page=b.dataset.page;render()});
+render();
+</script>
+</body>
+</html>
